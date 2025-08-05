@@ -78,7 +78,7 @@ Or use the .exe file provided
 ### 2. Choose Metadata Mode
 
 * **Same Metadata per File Mode**: Same metadata for all files. (Choice when doing a single series)
-* **Dfifferent Metadata per File Mode**: Extracted or fetched metadata per file. (Choice when doing an updates dump)
+* **Dfifferent Metadata per File Mode**: Seperate metadata per file. (Choice when doing an updates dump)
 
 ### 3. Fetch Metadata
 
@@ -209,15 +209,6 @@ Pull requests welcome for:
 * Feature suggestions
 
 Please file issues with debug logs and reproduction steps.
-
----
-
-## 🧪 Appendix: Developer Notes
-
-* **Logging**: All core actions/errors logged to `cbz_metadata.log`.
-* **Thread Safety**: Locking ensures safe parallel metadata injection.
-* **GUI Responsiveness**: Uses `Tk.after()` for thread-safe updates.
-* **Performance-Oriented**: Processes thousands of CBZs with low memory use via streaming and chunking.
 
 ---
 
