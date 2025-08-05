@@ -62,11 +62,12 @@ or
 ```bash
 uv cbz_metadata_manager.py
 ```
+Or use the .exe file provided
 ---
 
 ## 📖 Usage
 
-### 0. Download and Place the **Mangabaka JSONL Database** [https://mangabaka.dev/database](https://mangabaka.dev/database) in the folder script is in. For sustained/heavy usage, this is way to go as it makes everything goes much faster.
+### 0. Download and Place the **Mangabaka JSONL Database** [https://mangabaka.dev/database](https://mangabaka.dev/database) in the folder script/exe is in. For sustained/heavy usage, this is way to go as it makes everything goes much faster.
 
 ### 1. Load CBZ Files
 
@@ -184,6 +185,7 @@ cbz_metadata.log             # Debug log file
 
 ## 🧩 Troubleshooting & FAQ
 
+* **No Matches**: Check `series.jsonl` exists in the folder where script/.exe is in.
 * **File errors**: Check `cbz_metadata.log` for stack traces.
 * **API limits**: Retry/backoff built-in; edit rate in code if needed.
 * **Matching issues**: Improve regex or alias definitions.
@@ -219,8 +221,8 @@ Please file issues with debug logs and reproduction steps.
 
 ---
 
-💡 **Tip**: Build your local series DB as you go! Once filled, even huge collections can be auto-tagged offline with smart reuse.
-💡 **Tip**: When in doubt, please read the Tooltips.
+* 💡 **Tip**: Build your local series DB as you go! Once filled, even huge collections can be auto-tagged offline with smart reuse.
+* 💡 **Tip**: When in doubt, please read the Tooltips.
 
 
 ## 🧑‍💻 Author
