@@ -136,7 +136,6 @@ def is_valid_source_id(source_id, source_name):
     
     return True
 
-
 def center_window(window, width=None, height=None):
     """Center a window on the screen"""
     # Force the window to update its geometry
@@ -170,6 +169,10 @@ def center_window(window, width=None, height=None):
     y = max(0, y)
     
     window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
+def hotkey(text: str) -> str:
+    """Add underline to hotkey character in button text"""
+    return text.replace('_', '\u0332', 1)
 
 class ToolTip:
     """Create a tooltip for a given widget"""
@@ -218,7 +221,6 @@ class ToolTip:
         self.tipwindow = None
         if tw:
             tw.destroy()
-            
 
 class SeriesDatabase:
     """Class to handle series metadata database operations"""
@@ -1360,7 +1362,6 @@ def insert_comicinfo_into_cbz(cbz_path, xml_data):
                 pass
         raise
 
-
 def extract_volume_from_filename(filename):
     """Extract volume number from filename using pre-compiled patterns"""
     # Try main volume pattern first (fastest)
@@ -1384,8 +1385,6 @@ def extract_volume_from_filename(filename):
         return match.group(1)
     
     return None
-
-
 
 def extract_chapter_from_filename(filename):
     """Extract chapter number from filename using CHAPTER_PATTERN"""
@@ -1907,7 +1906,6 @@ def auto_extract_title(filename):
     logging.info(f"Auto-extracted title from filename '{filename}': '{cleaned}'")
     return cleaned
 
-
 class SeriesManagerDialog(tk.Toplevel):
     """Dialog for managing saved series metadata"""
     
@@ -2005,11 +2003,14 @@ class SeriesManagerDialog(tk.Toplevel):
         
         refresh_btn = ttk.Button(button_frame, text="Refresh", command=self.refresh_series_list)
         refresh_btn.pack(side='left', padx=(0, 15))
-        ToolTip(refresh_btn, "Refresh the series list from the database")
+        ToolTip(refresh_btn, "Refresh the series list from the database (F5)")
         
         close_btn = ttk.Button(button_frame, text="Close", command=self.destroy)
         close_btn.pack(side='right')
         ToolTip(close_btn, "Close the series manager dialog")
+        
+        # Add hotkey bindings for the dialog
+        self.bind('<F5>', lambda _: self.refresh_series_list())
         
     def refresh_series_list(self):
         """Refresh the series list with aliases - FIXED VERSION"""
@@ -2420,7 +2421,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             return content.strip()
         else:
             return widget.get().strip()
-            
+
     def create_widgets(self):
         main_frame = ttk.Frame(self)
         main_frame.pack(fill='both', expand=True, padx=10, pady=10)
@@ -2450,13 +2451,19 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         self.file_listbox.configure(yscrollcommand=file_scroll.set)
 
         # File selection buttons with tooltips
-        select_folder_btn = ttk.Button(file_list_frame, text="Select Folder", command=self.browse_cbz_folder)
+        select_folder_btn = ttk.Button(file_list_frame, text=hotkey("Select Fo_lder"), command=self.browse_cbz_folder)
         select_folder_btn.pack(side='right', padx=(5, 0))
-        ToolTip(select_folder_btn, "Browse and select a folder containing CBZ files")
+        ToolTip(select_folder_btn, "Browse and select a folder containing CBZ files (Ctrl+O)")
         
         select_cbz_btn = ttk.Button(file_list_frame, text="Select CBZ", command=self.browse_cbz_files)
         select_cbz_btn.pack(side='right', padx=(5, 0))
-        ToolTip(select_cbz_btn, "Browse and select individual CBZ files")
+        ToolTip(select_cbz_btn, "Browse and select individual CBZ files (Ctrl+Shift+O)")
+
+        # Bind hotkeys for file selection
+        self.bind('<Control-o>', lambda _: self.browse_cbz_folder())
+        self.bind('<Control-O>', lambda _: self.browse_cbz_folder())
+        self.bind('<Control-Shift-o>', lambda _: self.browse_cbz_files())
+        self.bind('<Control-Shift-O>', lambda _: self.browse_cbz_files())
 
         title_frame = ttk.Frame(top_frame)
         title_frame.pack(fill='x', pady=(0, 10))
@@ -2514,31 +2521,47 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         ttk.Label(series_db_frame, text="Series Database:", font=('TkDefaultFont', 9, 'bold')).pack(side='left')
         
         # Series database buttons with tooltips
-        save_aliases_btn = ttk.Button(series_db_frame, text="Save Series + Aliases", command=self.save_current_series_with_aliases)
+        save_aliases_btn = ttk.Button(series_db_frame, text=hotkey("S_ave Series + Aliases"), command=self.save_current_series_with_aliases)
         save_aliases_btn.pack(side='left', padx=(10, 5))
-        ToolTip(save_aliases_btn, "Save current series metadata to database with alias editing")
+        ToolTip(save_aliases_btn, "Save current series metadata to database with alias editing (Ctrl+S)")
         
-        save_quick_btn = ttk.Button(series_db_frame, text="Save (Quick)", command=self.save_current_series)
+        save_quick_btn = ttk.Button(series_db_frame, text=hotkey("S_ave (Quick)"), command=self.save_current_series)
         save_quick_btn.pack(side='left', padx=(0, 5))
-        ToolTip(save_quick_btn, "Quickly save current series metadata to database")
+        ToolTip(save_quick_btn, "Quickly save current series metadata to database (Ctrl+Shift+S)")
         
-        load_series_btn = ttk.Button(series_db_frame, text="Load Series", command=self.load_series_from_db)
+        load_series_btn = ttk.Button(series_db_frame, text=hotkey("L_oad Series"), command=self.load_series_from_db)
         load_series_btn.pack(side='left', padx=(0, 5))
-        ToolTip(load_series_btn, "Load previously saved series metadata from database")
+        ToolTip(load_series_btn, "Load previously saved series metadata from database (Ctrl+L)")
         
-        manage_series_btn = ttk.Button(series_db_frame, text="Manage Series", command=self.open_series_manager)
+        manage_series_btn = ttk.Button(series_db_frame, text=hotkey("M_anage Series"), command=self.open_series_manager)
         manage_series_btn.pack(side='left', padx=(0, 5))
-        ToolTip(manage_series_btn, "Open series database manager to view, edit, and organize saved series")
+        ToolTip(manage_series_btn, "Open series database manager to view, edit, and organize saved series (Ctrl+M)")
+        
+        # Bind hotkeys for series database operations
+        self.bind('<Control-s>', lambda _: self.save_current_series_with_aliases())
+        self.bind('<Control-S>', lambda _: self.save_current_series_with_aliases())
+        self.bind('<Control-Shift-s>', lambda _: self.save_current_series())
+        self.bind('<Control-Shift-S>', lambda _: self.save_current_series())
+        self.bind('<Control-l>', lambda _: self.load_series_from_db())
+        self.bind('<Control-L>', lambda _: self.load_series_from_db())
+        self.bind('<Control-m>', lambda _: self.open_series_manager())
+        self.bind('<Control-M>', lambda _: self.open_series_manager())
         
         ttk.Separator(series_db_frame, orient='vertical').pack(side='left', fill='y', padx=5)
         
-        match_file_btn = ttk.Button(series_db_frame, text="Match File", command=self._match_current_file_with_db)
+        match_file_btn = ttk.Button(series_db_frame, text=hotkey("Match F_ile"), command=self._match_current_file_with_db)
         match_file_btn.pack(side='left', padx=(0, 5))
-        ToolTip(match_file_btn, "Try to match current file with saved series using filename analysis")
+        ToolTip(match_file_btn, "Try to match current file with saved series using filename analysis (Ctrl+F)")
         
         match_all_btn = ttk.Button(series_db_frame, text="Match All", command=self._match_all_files_with_db)
         match_all_btn.pack(side='left', padx=(0, 5))
-        ToolTip(match_all_btn, "Try to match all files with saved series using filename analysis")
+        ToolTip(match_all_btn, "Try to match all files with saved series using filename analysis (Ctrl+Shift+F)")
+        
+        # Bind hotkeys for matching operations
+        self.bind('<Control-f>', lambda _: self._match_current_file_with_db())
+        self.bind('<Control-F>', lambda _: self._match_current_file_with_db())
+        self.bind('<Control-Shift-f>', lambda _: self._match_all_files_with_db())
+        self.bind('<Control-Shift-F>', lambda _: self._match_all_files_with_db())
 
         self.dropdown = ttk.Combobox(top_frame, textvariable=self.dropdown_var, state='readonly', font=('TkDefaultFont', 10))
         self.dropdown.pack(fill='x', pady=(10, 0))
@@ -2549,29 +2572,45 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         nav_frame.pack(fill='x', pady=(0, 10))
 
         # Navigation and utility buttons with tooltips
-        prev_btn = ttk.Button(nav_frame, text="Previous", command=self.prev_file)
+        prev_btn = ttk.Button(nav_frame, text=hotkey("P_revious"), command=self.prev_file)
         prev_btn.pack(side='left', padx=(0, 5))
-        ToolTip(prev_btn, "Navigate to the previous file in the list")
+        ToolTip(prev_btn, "Navigate to the previous file in the list (Alt+Left, Alt+P)")
         
-        next_btn = ttk.Button(nav_frame, text="Next", command=self.next_file)
+        next_btn = ttk.Button(nav_frame, text=hotkey("N_ext"), command=self.next_file)
         next_btn.pack(side='left', padx=(0, 15))
-        ToolTip(next_btn, "Navigate to the next file in the list")
+        ToolTip(next_btn, "Navigate to the next file in the list (Alt+Right, Alt+N)")
         
-        auto_fill_btn = ttk.Button(nav_frame, text="Auto-Fill Volume", command=self.fill_volume_info)
+        # Bind hotkeys for navigation
+        self.bind('<Alt-Left>', lambda _: self.prev_file())
+        self.bind('<Alt-Right>', lambda _: self.next_file())
+        self.bind('<Alt-p>', lambda _: self.prev_file())
+        self.bind('<Alt-P>', lambda _: self.prev_file())
+        self.bind('<Alt-n>', lambda _: self.next_file())
+        self.bind('<Alt-N>', lambda _: self.next_file())
+
+        auto_fill_btn = ttk.Button(nav_frame, text=hotkey("Auto-Fill V_olume"), command=self.fill_volume_info)
         auto_fill_btn.pack(side='left', padx=(0, 5))
-        ToolTip(auto_fill_btn, "Automatically extract volume/issue numbers from filename")
+        ToolTip(auto_fill_btn, "Automatically extract volume/issue numbers from filename (Ctrl+Alt+V)")
         
-        auto_fill_chapter_btn = ttk.Button(nav_frame, text="Auto-Fill Chapter", command=self.fill_chapter_info)
+        auto_fill_chapter_btn = ttk.Button(nav_frame, text=hotkey("Auto-Fill C_hapter"), command=self.fill_chapter_info)
         auto_fill_chapter_btn.pack(side='left', padx=(0, 5))
-        ToolTip(auto_fill_chapter_btn, "Automatically extract chapter/issue numbers from filename")
+        ToolTip(auto_fill_chapter_btn, "Automatically extract chapter/issue numbers from filename (Ctrl+Alt+C)")
         
-        count_pages_btn = ttk.Button(nav_frame, text="Count Pages", command=self.fill_page_count)
+        count_pages_btn = ttk.Button(nav_frame, text=hotkey("Count P_ages"), command=self.fill_page_count)
         count_pages_btn.pack(side='left', padx=(0, 5))
-        ToolTip(count_pages_btn, "Count and fill in the number of pages in the CBZ file")
+        ToolTip(count_pages_btn, "Count and fill in the number of pages in the CBZ file (Ctrl+Alt+P)")
         
         bulk_edit_check = ttk.Checkbutton(nav_frame, text="Bulk Edit All Files", variable=self.bulk_edit_enabled)
         bulk_edit_check.pack(side='right')
         ToolTip(bulk_edit_check, "When enabled, changes apply to all files instead of just the current file")
+        
+        # Bind hotkeys for auto-fill operations
+        self.bind('<Control-Alt-v>', lambda _: self.fill_volume_info())
+        self.bind('<Control-Alt-V>', lambda _: self.fill_volume_info())
+        self.bind('<Control-Alt-c>', lambda _: self.fill_chapter_info())
+        self.bind('<Control-Alt-C>', lambda _: self.fill_chapter_info())
+        self.bind('<Control-Alt-p>', lambda _: self.fill_page_count())
+        self.bind('<Control-Alt-P>', lambda _: self.fill_page_count())
 
         metadata_frame = ttk.LabelFrame(main_frame, text="Metadata Editor", padding=5)
         metadata_frame.pack(fill='both', expand=True, pady=(0, 10))
