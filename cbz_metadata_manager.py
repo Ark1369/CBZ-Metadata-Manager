@@ -618,10 +618,10 @@ def normalize_romaji_cached(text, cache={}):
     
     # Handle macrons - more comprehensive mapping
     macron_map = {
-        'Ã„Â': 'aa', 'Ã„Â«': 'ii', 'Ã…Â«': 'uu', 'Ã„â€œ': 'ee', 'Ã…Â': 'ou',
-        'ÃƒÂ¢': 'aa', 'ÃƒÂª': 'ee', 'ÃƒÂ®': 'ii', 'ÃƒÂ´': 'ou', 'ÃƒÂ»': 'uu',
-        'Ãƒ ': 'a', 'ÃƒÂ¨': 'e', 'ÃƒÂ¬': 'i', 'ÃƒÂ²': 'o', 'ÃƒÂ¹': 'u',
-        'ÃƒÂ¡': 'a', 'ÃƒÂ©': 'e', 'ÃƒÂ­': 'i', 'ÃƒÂ³': 'o', 'ÃƒÂº': 'u',
+        'ā': 'aa', 'ī': 'ii', 'ū': 'uu', 'ē': 'ee', 'ō': 'ou',
+        'â': 'aa', 'ê': 'ee', 'î': 'ii', 'ô': 'ou', 'û': 'uu',
+        'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
+        'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
     }
     for k, v in macron_map.items():
         text = text.replace(k, v)
@@ -632,7 +632,7 @@ def normalize_romaji_cached(text, cache={}):
     
     # LESS aggressive cleanup - preserve more characters that might be important
     # Replace various dashes with spaces but keep other punctuation for now
-    text = text.replace("Ã¢â‚¬â€œ", " ").replace("Ã¢â‚¬â€", " ").replace("-", " ")
+    text = text.replace("–", " ").replace("—", " ").replace("-", " ")
     
     # Remove only clearly problematic symbols, keep more punctuation
     text = re.sub(r"[^\w\s'.!?:;]", "", text)
@@ -2476,7 +2476,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         individual_radio.pack(anchor='w')
         ToolTip(individual_radio, "Use different metadata for each file based on filename matching")
 
-        local_only_check = ttk.Checkbutton(top_frame, text="Local Only Mode (No API requests)", variable=self.local_only_mode)
+        local_only_check = ttk.Checkbutton(top_frame, text="🗂️ Local Only Mode (No API requests)", variable=self.local_only_mode)
         local_only_check.pack(anchor='w', pady=(2, 0))
         ToolTip(local_only_check, "Enable to work only with local database, disable online metadata fetching")
 
@@ -2514,29 +2514,29 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         ttk.Label(series_db_frame, text="Series Database:", font=('TkDefaultFont', 9, 'bold')).pack(side='left')
         
         # Series database buttons with tooltips
-        save_aliases_btn = ttk.Button(series_db_frame, text="Save Series + Aliases", command=self.save_current_series_with_aliases)
+        save_aliases_btn = ttk.Button(series_db_frame, text="📂 Save Series + Aliases", command=self.save_current_series_with_aliases)
         save_aliases_btn.pack(side='left', padx=(10, 5))
         ToolTip(save_aliases_btn, "Save current series metadata to database with alias editing")
         
-        save_quick_btn = ttk.Button(series_db_frame, text="Save (Quick)", command=self.save_current_series)
+        save_quick_btn = ttk.Button(series_db_frame, text="📂 Save (Quick)", command=self.save_current_series)
         save_quick_btn.pack(side='left', padx=(0, 5))
         ToolTip(save_quick_btn, "Quickly save current series metadata to database")
         
-        load_series_btn = ttk.Button(series_db_frame, text="Load Series", command=self.load_series_from_db)
+        load_series_btn = ttk.Button(series_db_frame, text="📚 Load Series", command=self.load_series_from_db)
         load_series_btn.pack(side='left', padx=(0, 5))
         ToolTip(load_series_btn, "Load previously saved series metadata from database")
         
-        manage_series_btn = ttk.Button(series_db_frame, text="Manage Series", command=self.open_series_manager)
+        manage_series_btn = ttk.Button(series_db_frame, text="🗂️ Manage Series", command=self.open_series_manager)
         manage_series_btn.pack(side='left', padx=(0, 5))
         ToolTip(manage_series_btn, "Open series database manager to view, edit, and organize saved series")
         
         ttk.Separator(series_db_frame, orient='vertical').pack(side='left', fill='y', padx=5)
         
-        match_file_btn = ttk.Button(series_db_frame, text="Match File", command=self._match_current_file_with_db)
+        match_file_btn = ttk.Button(series_db_frame, text="🔍 Match File", command=self._match_current_file_with_db)
         match_file_btn.pack(side='left', padx=(0, 5))
         ToolTip(match_file_btn, "Try to match current file with saved series using filename analysis")
         
-        match_all_btn = ttk.Button(series_db_frame, text="Match All", command=self._match_all_files_with_db)
+        match_all_btn = ttk.Button(series_db_frame, text="🔍 Match All", command=self._match_all_files_with_db)
         match_all_btn.pack(side='left', padx=(0, 5))
         ToolTip(match_all_btn, "Try to match all files with saved series using filename analysis")
 
@@ -2549,11 +2549,11 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         nav_frame.pack(fill='x', pady=(0, 10))
 
         # Navigation and utility buttons with tooltips
-        prev_btn = ttk.Button(nav_frame, text="Previous", command=self.prev_file)
+        prev_btn = ttk.Button(nav_frame, text="◄ Previous", command=self.prev_file)
         prev_btn.pack(side='left', padx=(0, 5))
         ToolTip(prev_btn, "Navigate to the previous file in the list")
         
-        next_btn = ttk.Button(nav_frame, text="Next", command=self.next_file)
+        next_btn = ttk.Button(nav_frame, text="Next ►", command=self.next_file)
         next_btn.pack(side='left', padx=(0, 15))
         ToolTip(next_btn, "Navigate to the next file in the list")
         
@@ -2569,7 +2569,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         count_pages_btn.pack(side='left', padx=(0, 5))
         ToolTip(count_pages_btn, "Count and fill in the number of pages in the CBZ file")
         
-        bulk_edit_check = ttk.Checkbutton(nav_frame, text="Bulk Edit All Files", variable=self.bulk_edit_enabled)
+        bulk_edit_check = ttk.Checkbutton(nav_frame, text="📝 Bulk Edit All Files", variable=self.bulk_edit_enabled)
         bulk_edit_check.pack(side='right')
         ToolTip(bulk_edit_check, "When enabled, changes apply to all files instead of just the current file")
 
@@ -2594,7 +2594,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         # Column headers
         ttk.Label(scroll_frame, text="Field", font=('TkDefaultFont', 9, 'bold')).grid(row=1, column=0, sticky='w', padx=(5, 0))
         ttk.Label(scroll_frame, text="Original Metadata", font=('TkDefaultFont', 9, 'bold')).grid(row=1, column=1, sticky='ew', padx=5)
-        ttk.Label(scroll_frame, text="™", font=('TkDefaultFont', 9, 'bold')).grid(row=1, column=2, sticky='w', padx=(0, 5))
+        ttk.Label(scroll_frame, text="→", font=('TkDefaultFont', 9, 'bold')).grid(row=1, column=2, sticky='w', padx=(0, 5))
         ttk.Label(scroll_frame, text="Updated Metadata", font=('TkDefaultFont', 9, 'bold')).grid(row=1, column=3, sticky='ew', padx=5)
 
         self.copy_buttons = {}
@@ -2613,7 +2613,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             self.disable_middle_click_paste(before)
             ToolTip(before, f"Original {field} metadata from the CBZ file (read-only)")
 
-            copy_btn = ttk.Button(scroll_frame, text="™", width=3, command=lambda f=field: self.copy_field(f))
+            copy_btn = ttk.Button(scroll_frame, text="→", width=3, command=lambda f=field: self.copy_field(f))
             copy_btn.grid(row=row, column=2, padx=(2, 2), pady=2)
             ToolTip(copy_btn, f"Copy original {field} value to the updated field")
 
@@ -2637,7 +2637,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             
             after.grid(row=row, column=3, sticky='nsew', padx=(2, 2), pady=2)
 
-            clear_btn = ttk.Button(scroll_frame, text="¢", width=3, command=lambda f=field: self.clear_field(f))
+            clear_btn = ttk.Button(scroll_frame, text="✙", width=3, command=lambda f=field: self.clear_field(f))
             clear_btn.grid(row=row, column=4, padx=(2, 5), pady=2)
             ToolTip(clear_btn, f"Clear the {field} field")
 
@@ -3209,7 +3209,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             extracted_title = self._extract_title_from_filename(filename)
             
             if not extracted_title:
-                match_results.append(f"Ã¢ÂÅ’ {filename} - Could not extract title")
+                match_results.append(f"❌ {filename} - Could not extract title")
                 continue
             
             # Search for matching series (now includes aliases)
@@ -3236,11 +3236,11 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                             self.file_metadata[cbz_path]['Volume'] = volume
                     
                     matched_files += 1
-                    match_results.append(f"{filename} {best_match}")
+                    match_results.append(f"✅ {filename} → {best_match}")
                 else:
-                    match_results.append(f"{filename} - Failed to load '{best_match}' metadata")
+                    match_results.append(f"❌ {filename} - Failed to load '{best_match}' metadata")
             else:
-                match_results.append(f"{filename} - No match found")
+                match_results.append(f"❌ {filename} - No match found")
         
         # Refresh display
         self.load_metadata(self.current_index)
@@ -3768,7 +3768,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         """FIXED version of fetch_metadata_batch - no popups"""
         title = self.title_var.get().strip()
         if not title:
-            print("’ Error: Please enter a manga title")
+            print("Error: Please enter a manga title")
             return
             
         try:
@@ -3778,7 +3778,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             raw_entries = find_best_match_merge_aware(title)  # This returns raw entries
             
             if not raw_entries:
-                print(f"’ No metadata found for title: '{title}'")
+                print(f"No metadata found for title: '{title}'")
                 return
             
             # Extract metadata from raw entries
@@ -3845,7 +3845,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         for cbz_path in self.cbz_paths[:3]:  # Test first 3 files
             filename = os.path.basename(cbz_path)
             title = self._extract_title_from_filename(filename)
-            test_titles.append(f"{filename} '{title}'")
+            test_titles.append(f"{filename} → '{title}'")
         
         # Show user what titles will be extracted
         preview_msg = "Will extract these titles from filenames:\n\n" + "\n".join(test_titles)
@@ -3995,27 +3995,27 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         # Create detailed results message
         results = []
         if successful > 0:
-            results.append(f" Successfully fetched metadata for {successful}/{total} files")
+            results.append(f"✓ Successfully fetched metadata for {successful}/{total} files")
         
         if failed_extractions:
-            results.append(f"¡  Could not extract titles from {len(failed_extractions)} files:")
+            results.append(f"\n⚠ Could not extract titles from {len(failed_extractions)} files:")
             for filename in failed_extractions[:5]:  # Show first 5
-                results.append(f" {filename}")
+                results.append(f"  • {filename}")
             if len(failed_extractions) > 5:
                 results.append(f"  ... and {len(failed_extractions) - 5} more")
         
         if failed_fetches:
-            results.append(f"  No metadata found for {len(failed_fetches)} files:")
+            results.append(f"\n⚠ No metadata found for {len(failed_fetches)} files:")
             for filename in failed_fetches[:5]:  # Show first 5
-                results.append(f" {filename}")
+                results.append(f"  • {filename}")
             if len(failed_fetches) > 5:
                 results.append(f"  ... and {len(failed_fetches) - 5} more")
         
         if successful == 0:
-            results.append(" Tips for better results:")
-            results.append(" Make sure filenames contain the manga title")
-            results.append(" Try removing extra text like '[Group]' or quality tags")
-            results.append(" Use 'Same metadata for all files' if they're the same series")
+            results.append("\n💡 Tips for better results:")
+            results.append("• Make sure filenames contain the manga title")
+            results.append("• Try removing extra text like '[Group]' or quality tags")
+            results.append("• Use 'Same metadata for all files' if they're the same series")
             
             messagebox.showinfo("No Results", "\n".join(results))
             return
@@ -4079,7 +4079,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             filename = os.path.basename(cbz_path)
             # Add indicator if metadata was fetched individually
             if cbz_path in self.individual_metadata_cache:
-                indicator = " "
+                indicator = "✓ "
             else:
                 indicator = ""
             
@@ -4189,13 +4189,13 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             files_with_errors = []
             
             print(f"\n{'='*60}")
-            print(f"ANILIST METADATA FETCH STARTING")
+            print(f"🔍 ANILIST METADATA FETCH STARTING")
             print(f"{'='*60}")
             
             # Process each file
             for i, cbz_path in enumerate(self.cbz_paths):
                 filename = os.path.basename(cbz_path)
-                print(f"Processing [{i+1}/{len(self.cbz_paths)}]: {filename}")
+                print(f"📁 Processing [{i+1}/{len(self.cbz_paths)}]: {filename}")
                 
                 # Update progress (you might want to add a progress bar here)
                 self.update_idletasks()
@@ -4205,7 +4205,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                 
                 if not web_links:
                     files_with_no_links.append(filename)
-                    print(f"No web links found in metadata")
+                    print(f"   ❌ No web links found in metadata")
                     continue
                 
                 # Extract AniList URL for this file
@@ -4218,7 +4218,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                 
                 if not anilist_url:
                     files_with_no_links.append(filename)
-                    print(f"No AniList link found in web links")
+                    print(f"   ❌ No AniList link found in web links")
                     continue
                 
                 # Extract AniList ID
@@ -4226,18 +4226,18 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                     anilist_id = extract_anilist_id_from_url(anilist_url)
                     if not anilist_id:
                         files_with_errors.append(filename)
-                        print(f"Could not extract AniList ID from URL: {anilist_url}")
+                        print(f"   ❌ Could not extract AniList ID from URL: {anilist_url}")
                         continue
                     
                     # Validate ID is numeric
                     if not str(anilist_id).isdigit():
                         files_with_errors.append(filename)
-                        print(f"Invalid AniList ID format: '{anilist_id}' (must be numeric)")
+                        print(f"   ❌ Invalid AniList ID format: '{anilist_id}' (must be numeric)")
                         continue
                         
                 except Exception as e:
                     files_with_errors.append(filename)
-                    print(f"Error extracting AniList ID: {str(e)}")
+                    print(f"   ❌ Error extracting AniList ID: {str(e)}")
                     continue
                 
                 # Fetch AniList metadata for this file
@@ -4248,40 +4248,40 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                         current_metadata.update(anilist_metadata)
                         self.file_metadata[cbz_path] = current_metadata
                         files_updated += 1
-                        print(f"Successfully fetched metadata (ID: {anilist_id})")
+                        print(f"   ✅ Successfully fetched metadata (ID: {anilist_id})")
                     else:
                         files_with_errors.append(filename)
-                        print(f"AniList API returned no data for ID: {anilist_id}")
+                        print(f"   ❌ AniList API returned no data for ID: {anilist_id}")
                         
                 except Exception as e:
                     files_with_errors.append(filename)
-                    print(f"AniList API error: {str(e)}")
+                    print(f"   ❌ AniList API error: {str(e)}")
             
             # Print summary to console
             print(f"\n{'='*60}")
-            print(f"ANILIST FETCH RESULTS SUMMARY")
+            print(f"📊 ANILIST FETCH RESULTS SUMMARY")
             print(f"{'='*60}")
-            print(f"Successfully updated: {files_updated}/{len(self.cbz_paths)} files")
+            print(f"✅ Successfully updated: {files_updated}/{len(self.cbz_paths)} files")
             
             if files_with_no_links:
-                print(f"No AniList links: {len(files_with_no_links)} files")
+                print(f"⚠️  No AniList links: {len(files_with_no_links)} files")
                 for filename in files_with_no_links:
-                    print(f"{filename}")
+                    print(f"   • {filename}")
             
             if files_with_errors:
-                print(f"Errors: {len(files_with_errors)} files")
+                print(f"❌ Errors: {len(files_with_errors)} files")
                 for filename in files_with_errors:
-                    print(f"{filename}")
+                    print(f"   • {filename}")
             
             if files_with_no_links or files_with_errors:
-                print(f"\nTROUBLESHOOTING TIPS:")
+                print(f"\n💡 TROUBLESHOOTING TIPS:")
                 if files_with_no_links:
-                    print(f"Make sure to fetch Mangabaka metadata first")
-                    print(f"Check that the Mangabaka entries include AniList links")
+                    print(f"   • Make sure to fetch Mangabaka metadata first")
+                    print(f"   • Check that the Mangabaka entries include AniList links")
                 if files_with_errors:
-                    print(f"Check that AniList URLs are properly formatted")
-                    print(f"Verify the AniList manga IDs are valid")
-                    print(f"Some entries might not have AniList pages")
+                    print(f"   • Check that AniList URLs are properly formatted")
+                    print(f"   • Verify the AniList manga IDs are valid")
+                    print(f"   • Some entries might not have AniList pages")
             
             print(f"{'='*60}\n")
             
@@ -4291,11 +4291,11 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             # Show simple success message
             if files_updated > 0:
                 print("AniList Fetch Complete", 
-                                  f"Successfully updated {files_updated}/{len(self.cbz_paths)} files!\n\n"
+                                  f"✅ Successfully updated {files_updated}/{len(self.cbz_paths)} files!\n\n"
                                   f"Check console for detailed results.")
             else:
                 messagebox.showwarning("AniList Fetch Complete", 
-                                     f"No files were updated.\n\n"
+                                     f"❌ No files were updated.\n\n"
                                      f"Check console for detailed error information.")
             
         except Exception as e:
@@ -4540,10 +4540,10 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                            relief='flat')
         tips_text.pack(fill='x')
         tips_text.insert('1.0', 
-            "More threads = faster processing for multiple files\n"
-            "Too many threads may cause system slowdown\n"
-            "For SSDs: 8-16 threads usually optimal\n"
-            "For HDDs: 2-4 threads recommended")
+            "• More threads = faster processing for multiple files\n"
+            "• Too many threads may cause system slowdown\n"
+            "• For SSDs: 8-16 threads usually optimal\n"
+            "• For HDDs: 2-4 threads recommended")
         tips_text.config(state='disabled')
         
         # Buttons
@@ -4804,21 +4804,21 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
                 messagebox.showwarning("Partial Success", error_msg)
         else:
             print("Success", 
-                               f"Successfully inserted metadata into all {success_count} CBZ files "
+                               f"✅ Successfully inserted metadata into all {success_count} CBZ files "
                                f"using {getattr(self, '_max_workers', 1)} parallel threads!")
     
     def _handle_insertion_cancelled(self, success_count, error_files):
         """Handle user cancellation (called on main thread)"""
         self._hide_insertion_progress()
         messagebox.showinfo("Operation Cancelled", 
-                           f"Operation cancelled by user.\n\n"
+                           f"❌ Operation cancelled by user.\n\n"
                            f"Successfully processed {success_count} files before cancellation.")
     
     def _handle_insertion_error(self, error_msg, success_count):
         """Handle critical error (called on main thread)"""
         self._hide_insertion_progress()
         messagebox.showerror("Critical Error", 
-                            f"Critical error occurred:\n{error_msg}\n\n"
+                            f"💥 Critical error occurred:\n{error_msg}\n\n"
                             f"Successfully processed {success_count} files before error.")
     
     def _show_detailed_results(self, success_count, total_files, error_files):
@@ -4831,7 +4831,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
         # Summary
         summary_text = f"Processed {success_count}/{total_files} files successfully"
         if error_files:
-            summary_text += f"{len(error_files)} errors"
+            summary_text += f" • {len(error_files)} errors"
         
         ttk.Label(result_window, text=summary_text, font=('TkDefaultFont', 10, 'bold')).pack(pady=10)
         
@@ -4851,7 +4851,7 @@ class MetadataGUI(tkdnd.Tk):  # Changed from tk.Tk to tkdnd.Tk for drag and drop
             
             # Insert error details
             for error in error_files:
-                text_widget.insert('end', f" {error}\n")
+                text_widget.insert('end', f"• {error}\n")
             
             text_widget.configure(state='disabled')  # Make read-only
         
